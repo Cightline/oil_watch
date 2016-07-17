@@ -1,0 +1,7 @@
+{% include 'header.html' %}
+{% include 'navigation.html' %}
+
+<div class="container-fluid">
+    <p>WTI futures</p>
+    {{ db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'CLQ16.NYM').first().price }}
+</div>

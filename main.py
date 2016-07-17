@@ -1,10 +1,10 @@
 import json
 
-from flask import Flask
+from flask import Flask, render_template
 
+from sql.db_connect import Connect
 
-
-app = Flask(__name__)
+app   = Flask(__name__)
 
 with open('config.json') as cfg:
     config = json.load(cfg)
@@ -12,11 +12,19 @@ with open('config.json') as cfg:
 
 app.config.update(config)
 
-@app.route("/")
+db = Connect(app.config['SQLALCHEMY_DATABASE_URI'])
+
+@app.route('/')
 def index():
-    return 'index'
+    return render_template('index.html')
 
+@app.route('/map')
+def map():
+    return render_template('map.html')
 
+@app.route('/prices')
+def prices():
+    return render_template('prices.html', db=db)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=config['port'])
+    app.run(host=config['host'], port=config['port'])
