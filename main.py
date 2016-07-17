@@ -22,9 +22,9 @@ def index():
 def map():
     return render_template('map.html')
 
-@app.route('/prices')
-def prices():
-    return render_template('prices.html', db=db)
+@app.route('/commodities')
+def commodities():
+    return render_template('commodities.html', db=db)
 
 if __name__ == '__main__':
     app.run(host=config['host'], port=config['port'])

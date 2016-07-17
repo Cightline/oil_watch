@@ -9,6 +9,7 @@
     "DEBUG":true,
     "port":5001,
     "host":"0.0.0.0",
+    "js_api_key":"AIzaSyC3rSqSEx8omww28Q1ZF4IqOPzc3XgI9N8",
     "site_address":"http://core.sightline.systems:5000",
     "CACHE_TYPE":"simple"
 
