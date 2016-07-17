@@ -26,5 +26,9 @@ def map():
 def commodities():
     return render_template('commodities.html', db=db)
 
+@app.route('/stats')
+def production():
+    return render_template('stats.html',  db=db)
+
 if __name__ == '__main__':
     app.run(host=config['host'], port=config['port'])
