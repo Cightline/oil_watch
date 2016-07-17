@@ -1,0 +1,12 @@
+[Unit]
+Description=UWSGI service for oil stuff
+After=network.target ypbind.service sssd.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jewmake/oil_watch
+ExecStart=/usr/local/bin/uwsgi --socket 127.0.0.1:4242 --module main --callable app
+
+[Install]
+WantedBy=multi-user.target
