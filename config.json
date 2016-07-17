@@ -1,0 +1,23 @@
+{
+    "general":{
+        "base_dir":"/home/stealth/programming/oil_watch"
+    },
+
+
+
+    "SQLALCHEMY_DATABASE_URI":"sqlite:////home/stealth/programming/oil_watch/points.db",
+    "DEBUG":true,
+    "port":"5001",
+    "site_address":"http://core.sightline.systems:5000",
+
+    "etc":[
+        "police",
+        "wreck",
+        "roadkill",
+        "fire",
+        "blackice"
+    ]
+
+
+}
+         
