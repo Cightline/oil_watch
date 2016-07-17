@@ -34,7 +34,9 @@ def store_data(ticker):
                                       r_time=r_time,
                                       ticker=ticker,
                                       name=jd['Name'],
-                                      change=jd['Change'],
+                                      change=float(jd['LastTradePriceOnly']) - float(jd['PreviousClose']),
+                                      open_price=jd['Open'],
+                                      previous_close=jd['PreviousClose'],
                                       price=jd['LastTradePriceOnly'])
     db.session.add(new_data)
     db.session.commit()

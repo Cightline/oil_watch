@@ -17,47 +17,51 @@ tr
     font-family: monospace;
 }
 
+td
+{
+    font-family: monospace;
+}
+
 </style>
     
 
 <div class="container-fluid">
-    <table class="table table-striped">
-        <tr>
-            <th>Commodity</th>
-            <th>Price</th>
-            <th>Date</th>
-            <th>Change</th>
-        </tr>
-        <tr>
-            <td><a href="https://finance.yahoo.com/quote/CLQ16.NYM/news">WTI</td>
-            <td> {{ wti.price }} </td>
-            <td> {{ wti.p_time.strftime('%B %d %Y') }} </td>
-            <td> {{ wti.change }} </td>
-        </tr>
+    <div class="col-md-8">
+        <table class="table table-hover table-condensed" width="10%">
+            <tr>
+                <th>Commodity</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Change</th>
+                <th class="text-right">Date</th>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/CLQ16.NYM/news">WTI</td>
+                <td class="text-right"> {{ wti.price }} </td>
+                <td class="text-right"> {{ '%0.2f' %  (wti.change) }} </td>
+                <td class="text-right"> {{ wti.p_time.strftime('%B %d %Y') }} </td>
+            </tr>
 
-        <tr>
-            <td><a href="https://finance.yahoo.com/quote/BZU16.NYM/news">Brent</td>
-            <td> {{ brent.price }} </td>
-            <td> {{ brent.p_time.strftime('%B %d %Y') }} </td>
-            <td> {{ brent.change }}</td>
-        </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/BZU16.NYM/news">Brent</td>
+                <td class="text-right"> {{ brent.price }} </td>
+                <td class="text-right"> {{ '%0.2f' %  (brent.change) }} </td>
+                <td class="text-right"> {{ brent.p_time.strftime('%B %d %Y') }} </td>
+            </tr>
 
-        <tr>
-            <td><a href="https://finance.yahoo.com/quote/DX-Y.NYB/news">US dollar</td>
-            <td>{{ us_dollar.price }}</td>
-            <td>{{ us_dollar.p_time.strftime('%B %d %Y') }} </td>
-            <td> {{ us_dollar.change }} </td>
-        </tr>
-
-
-        <tr>
-            <td><a href="https://finance.yahoo.com/quote/YGQ16.NYB/news">Gold</td>
-            <td>{{ gold.price }}</td>
-            <td>{{ gold.p_time.strftime('%B %d %Y') }} </td>
-            <td> {{ gold.change }} </td>
-        </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/DX-Y.NYB/news">US dollar</td>
+                <td class="text-right">{{ us_dollar.price }}</td>
+                <td class="text-right"> {{ '%0.2f' %  (us_dollar.change) }} </td>
+                <td class="text-right">{{ us_dollar.p_time.strftime('%B %d %Y') }} </td>
+            </tr>
 
 
-
-    </table>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/YGQ16.NYB/news">Gold</td>
+                <td class="text-right">{{ gold.price }}</td>
+                <td class="text-right"> {{ '%0.2f' %  (gold.change) }} </td>
+                <td class="text-right">{{ gold.p_time.strftime('%B %d %Y') }} </td>
+            </tr>
+        </table>
+    </div>
 </div>
