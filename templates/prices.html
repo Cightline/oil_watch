@@ -1,7 +1,63 @@
 {% include 'header.html' %}
 {% include 'navigation.html' %}
 
+{% set wti   = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'CLQ16.NYM').first() %}
+{% set brent = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'BZU16.NYM').first() %}
+{% set gold  = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'YGQ16.NYB').first() %}
+{% set us_dollar  = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'DX-Y.NYB').first() %}
+
+<style>
+th 
+{
+    font-family: monospace;
+}
+
+tr
+{
+    font-family: monospace;
+}
+
+</style>
+    
+
 <div class="container-fluid">
-    <p>WTI futures</p>
-    {{ db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == 'CLQ16.NYM').first().price }}
+    <table class="table table-striped">
+        <tr>
+            <th>Commodity</th>
+            <th>Price</th>
+            <th>Date</th>
+            <th>Change</th>
+        </tr>
+        <tr>
+            <td> WTI </td>
+            <td> {{ wti.price }} </td>
+            <td> {{ wti.p_time.strftime('%B %d %Y') }} </td>
+            <td> {{ wti.change }} </td>
+        </tr>
+
+        <tr>
+            <td> Brent </td>
+            <td> {{ brent.price }} </td>
+            <td> {{ brent.p_time.strftime('%B %d %Y') }} </td>
+            <td> {{ brent.change }}</td>
+        </tr>
+
+        <tr>
+            <td>US dollar</td>
+            <td>{{ us_dollar.price }}</td>
+            <td>{{ us_dollar.p_time.strftime('%B %d %Y') }} </td>
+            <td> {{ us_dollar.change }} </td>
+        </tr>
+
+
+        <tr>
+            <td>Gold</td>
+            <td>{{ gold.price }}</td>
+            <td>{{ gold.p_time.strftime('%B %d %Y') }} </td>
+            <td> {{ gold.change }} </td>
+        </tr>
+
+
+
+    </table>
 </div>

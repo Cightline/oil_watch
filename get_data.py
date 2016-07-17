@@ -22,8 +22,8 @@ def store_data(ticker):
     jd = data.json()['query']['results']['quote']
 
     # debug
-    #for key in jd.keys():
-    #    print(key, jd[key])
+    for key in jd.keys():
+        print(key, jd[key])
 
     # We want this to fail is something isn't here
     # LastTradeDate 7/15/2016
@@ -33,6 +33,8 @@ def store_data(ticker):
     new_data = db.base.classes.prices(p_time=datetime.now(), 
                                       r_time=r_time,
                                       ticker=ticker,
+                                      name=jd['Name'],
+                                      change=jd['Change'],
                                       price=jd['LastTradePriceOnly'])
     db.session.add(new_data)
     db.session.commit()
