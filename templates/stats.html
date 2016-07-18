@@ -15,14 +15,14 @@
                 <th>date</th>
                 <th class="text-right">exports</th>
                 <th class="text-right">imports</th>
-                <th class="text-right">exports vs imports</th>
+                <th class="text-right">difference</th>
             </tr>
                 {% for x in range(months) %}
                 <tr>
                     <td>{{ eia_exports[x].date.strftime('%B %d %Y') }}</td>
                     <td class="text-right">{{ '%0.2f' % (eia_exports[x].value/1000)  }}K</td>
                     <td class="text-right">{{ '%0.2f' % (eia_imports[x].value/1000)  }}K</td>
-                    <td class="text-right">{{ '%0.2f' % ((eia_imports[x].value - eia_exports[x].value)/1000)  }}K</td>
+                    <td class="text-right">{{ '%0.2f' % ((eia_exports[x].value - eia_imports[x].value)/1000)  }}K</td>
                 </tr>
                 {% endfor %}
         </table>
