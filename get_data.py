@@ -4,7 +4,6 @@ from datetime import datetime
 
 import requests
 import eia
-import pandas 
 
 from sql.db_connect import Connect
 
@@ -90,7 +89,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
    
     if args.store_ticker:
-        store_data(args.ticker)
+        store_data(args._store_ticker)
     
     elif args.store_eia_imports:
         store_eia_imports()
