@@ -1,7 +1,7 @@
 {% include 'header.html' %}
 {% include 'navigation.html' %}
 
-{% set months      = 29 %}
+{% set months      = 49 %}
 {% set eia_imports = db.session.query(db.base.classes.eia_imports).order_by(db.base.classes.eia_imports.date.desc()).limit(months + 1) %}
 {% set eia_exports = db.session.query(db.base.classes.eia_exports).order_by(db.base.classes.eia_exports.date.desc()).limit(months + 1) %}
 
@@ -13,8 +13,8 @@
     <table class="table table-hover">
             <tr>
                 <th>date</th>
-                <th class="text-right">imports</th>
                 <th class="text-right">exports</th>
+                <th class="text-right">imports</th>
                 <th class="text-right">exports vs imports</th>
             </tr>
                 {% for x in range(months) %}
