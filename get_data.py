@@ -17,11 +17,16 @@ y_api = 'https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance
 
 eia_api = eia.API(config['eia_api_key'])
 
-def store_eia_imports():
+
+def store_eia_data(option):
     # PET_IMPORTS.WORLD-US-ALL.M 
     # Imports of all grades of crude oil from World to Total U.S. (US), Monthly
 
-    search = eia_api.data_by_series('PET_IMPORTS.WORLD-US-ALL.M')
+    if option == 'imports':
+        search = eia_api.data_by_series('PET_IMPORTS.WORLD-US-ALL.M')
+
+    elif option == 'exports':
+        search = eia_api.data_by_series('PET.MTTEXUS1.M')
 
     #for key, value in search.items():
     #    print(key, value)
@@ -36,17 +41,24 @@ def store_eia_imports():
     for key in data.keys():
         date  = datetime.strptime(key.strip(), '%Y %m')
         value = data[key]
-    
-        exists = db.session.query(db.base.classes.eia_imports).filter(db.base.classes.eia_imports.date == date).first()
+        
+        if option == 'imports':
+            exists = db.session.query(db.base.classes.eia_imports).filter(db.base.classes.eia_imports.date == date).first()
+
+        elif option == 'exports':
+            exists = db.session.query(db.base.classes.eia_exports).filter(db.base.classes.eia_exports.date == date).first()
 
         if exists:
             continue 
 
         print(date, value)
 
-        new_data = db.base.classes.eia_imports(p_time=datetime.now(),
-                                               date=date,
-                                               value=value)
+        if option == 'imports':
+            new_data = db.base.classes.eia_imports(p_time=datetime.now(), date=date, value=value)
+
+        elif option == 'exports':
+            new_data = db.base.classes.eia_exports(p_time=datetime.now(), date=date, value=value)
+
 
         db.session.add(new_data)
         db.session.commit()
@@ -84,12 +96,13 @@ def store_data(ticker):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='store economic data')
     parser.add_argument('--store-ticker', action='store')
-    parser.add_argument('--store-eia-imports', action='store_true')
+    parser.add_argument('--store-eia-data', action='store')
 
     args = parser.parse_args()
    
     if args.store_ticker:
         store_data(args.store_ticker)
     
-    elif args.store_eia_imports:
-        store_eia_imports()
+    elif args.store_eia_data:
+        store_eia_data(args.store_eia_data)
+

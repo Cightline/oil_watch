@@ -28,6 +28,7 @@ def commodities():
 
 @app.route('/stats')
 def production():
+
     return render_template('stats.html',  db=db)
 
 if __name__ == '__main__':

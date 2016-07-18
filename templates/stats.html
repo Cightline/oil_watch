@@ -1,26 +1,54 @@
 {% include 'header.html' %}
 {% include 'navigation.html' %}
 
-{% set eia_imports = db.session.query(db.base.classes.eia_imports).order_by(db.base.classes.eia_imports.date.desc()).limit(12) %}
+{% set months      = 29 %}
+{% set eia_imports = db.session.query(db.base.classes.eia_imports).order_by(db.base.classes.eia_imports.date.desc()).limit(months + 1) %}
+{% set eia_exports = db.session.query(db.base.classes.eia_exports).order_by(db.base.classes.eia_exports.date.desc()).limit(months + 1) %}
 
 <div class="container-fluid">
-    <h4>Imports of all grades of crude oil from World to Total U.S. (US), Monthly</h4>
-
     <div class="col-md-8">
-        <iframe id="eia_widget" style="width:100%;height:500px" src="//www.eia.gov/opendata/embed/iframe.php?relation_id=PET_IMPORTS.US-ALL.M|GRADE&regions=WLD&relation_mode=line"></iframe>
 
-        <table class="table table-hover table-condensed" width="10%">
-            <tr>
-                <th>Date</th>
-                <th>Units</th>
-            </tr>
-                {% for row in eia_imports %}
-                <tr>
-                    <td>{{ row.date.strftime('%B %Y') }}</td>
-                    <td>{{ row.value }}</td>
-                </tr>
-                {% endfor %}
-        </table>
+        <div class="container" id="linechart_holder">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+       
+            google.charts.load('current', {'packages':['line']});
+            google.charts.setOnLoadCallback(drawChart);
+
+
+            function drawChart()
+            {
+                var data = new google.visualization.DataTable();
+
+                data.addColumn('datetime', 'date');
+                data.addColumn('number',   'exported barrels');
+                data.addColumn('number',   'imported barrels');
+
+                // holy fuck fix this
+                // add a date validation (month == month)
+                data.addRows([
+                {% for x in range(months + 1) %}
+                [new Date("{{ eia_exports[x].date.strftime('%Y-%m-%d') }}"),{{ eia_exports[x].value }},{{ eia_imports[x].value }}]{% if (x != months) %},{% endif %}{% endfor %}]);
+
+                var options = 
+                {
+                    chart: 
+                    {
+                        title: 'Oil imports and exports',
+                        subtitle: 'updated monthly ({{ months + 1 }} months shown)'
+                    },
+                    width: "100%",
+                    height: 500
+                };
+
+                var chart = new google.charts.Line(document.getElementById('linechart_holder'));
+
+                chart.draw(data, options);
+            }
+
+        </script> 
+
     </div>
 </div>
 
