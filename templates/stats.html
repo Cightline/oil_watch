@@ -7,8 +7,26 @@
 
 <div class="container-fluid">
     <div class="col-md-8">
+    <div class="container" id="linechart_holder"></div>
+    <br>
+   
+    <table class="table table-hover">
+            <tr>
+                <th>date</th>
+                <th class="text-right">imports</th>
+                <th class="text-right">exports</th>
+                <th class="text-right">exports vs imports</th>
+            </tr>
+                {% for x in range(months) %}
+                <tr>
+                    <td>{{ eia_exports[x].date.strftime('%B %d %Y') }}</td>
+                    <td class="text-right">{{ '%0.2f' % (eia_exports[x].value/1000)  }}K</td>
+                    <td class="text-right">{{ '%0.2f' % (eia_imports[x].value/1000)  }}K</td>
+                    <td class="text-right">{{ '%0.2f' % ((eia_imports[x].value - eia_exports[x].value)/1000)  }}K</td>
+                </tr>
+                {% endfor %}
+        </table>
 
-        <div class="container" id="linechart_holder">
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -49,7 +67,6 @@
 
         </script> 
 
-    </div>
 </div>
 
 
