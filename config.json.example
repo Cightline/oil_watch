@@ -1,0 +1,59 @@
+{
+    "port": 5001, 
+    "CACHE_TYPE": "simple", 
+    "commodities": {"wti": "CLQ16.NYM", "brent": "BZU16.NYM", "dollar": "DX-Y.NYB", "gold": "YGQ16.NYB"}, 
+    "host": "0.0.0.0", 
+    "general": 
+    {
+        "base_dir": "/home/stealth/programming/oil_watch"
+    }, 
+    
+    "site_address": "http://core.sightline.systems:5000", 
+    "js_api_key": "AIzaSyC3rSqSEx8omww28Q1ZF4IqOPzc3XgI9N8", 
+    "SQLALCHEMY_DATABASE_URI": "sqlite:////home/stealth/programming/oil_watch/data.db", 
+    "DEBUG": true, 
+    "eia_api_key": "",
+    "quandl_api_key": "",
+    "plotly_api_key":"",
+    "plotly_username":"",
+
+    "global_exports":
+    {
+        "united states":"JODI/OIL_GDEXKB_USA",
+        "australia":"JODI/OIL_CREXKB_AUS",
+        "china":"JODI/OIL_CREXKD_CHN",
+        "japan":"JODI/OIL_GDEXKB_JPN",
+        "russia":"JODI/OIL_CREXKB_RUS",
+        "saudi arabia":"JODI/OIL_CREXKB_SAU",
+        "canada":"JODI/OIL_CREXKB_CAN",
+        "norway":"JODI/OIL_CREXKB_NOR",
+        "turkey":"JODI/OIL_CREXKB_TUR"
+    },
+
+    "global_imports":
+    {
+        "united states":"JODI/OIL_CRIMKB_USA",
+        "australia":"JODI/OIL_CRIMKB_AUS",
+        "china":"JODI/OIL_CRIMKB_CHN",
+        "japan":"JODI/OIL_CRIMKB_JPN",
+        "russia":"JODI/OIL_CRIMKB_RUS",
+        "saudi arabia":"JODI/OIL_CRIMKB_SAU",
+        "canada":"JODI/OIL_CRIMKB_CAN",
+        "norway":"JODI/OIL_CRIMKB_NOR",
+        "turkey":"JODI/OIL_CRIMKB_TUR"
+    },
+
+    "global_production":
+    {
+        "united states":"JODI/OIL_CRPRKB_USA",
+        "australia":"JODI/OIL_CRPRKD_AUS",
+        "china":"JODI/OIL_CRPRKD_CHN",
+        "japan":"JODI/OIL_CRPRKD_JPN",
+        "russia":"JODI/OIL_CRPRKD_RUS",
+        "saudi arabia":"JODI/OIL_CRPRKB_SAU",
+        "canada":"JODI/OIL_CRPRKB_CAN",
+        "norway":"JODI/OIL_CRPRKD_NOR",
+        "turkey":"JODI/OIL_CRPRKB_TUR"
+
+    }
+}

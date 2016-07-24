@@ -1,46 +1,42 @@
 {% include 'header.html' %}
 {% include 'navigation.html' %}
 
-<style>
-html, body 
-{
-    height: 100%;
-    margin: 0;
-    padding: 1;
-}
-#map 
-{
-    height: 70%;
-}
-    
-</style>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+</head>
 
 
-    <script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawRegionsMap);
 
-    var styles = [
-    {
-        featureType: "road",
-        
-        stylers: [ { visibility: "off" } ]
-    }]
+      function drawRegionsMap() {
 
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Popularity'],
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+        ]);
 
-      var map;
-      function initMap() 
-      { 
-          map = new google.maps.Map(document.getElementById('map'), 
-                  { 
-                      center: {lat: 14.820, lng: -25.176}, 
-                      zoom: 3 
-                  }); 
+        var options = {};
 
-          map.setOptions({styles:styles});
+        var chart = new google.visualization.GeoChart(document.getElementById('map_holder'));
+
+        chart.draw(data, options);
       }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ config['js_api_key'] }}&callback=initMap" async defer></script>
 
 
+<div class="container-fluid">
+    <div class="col-md-8">
+        <div class="container-fluid" id="map_holder" style="width: 100%; height: 500px;"></div>
 
-<div class="container-fluid" id="map"></div>
+

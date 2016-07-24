@@ -13,7 +13,6 @@ class Price(Base):
     price       = Column(Float)
     ticker      = Column(String(100))
     name        = Column(String(200))
-    change      = Column(Float)
     open_price  = Column(Float)
     previous_close = Column(Float)
 

@@ -4,8 +4,8 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 
-from sql.price_schema import *
-from sql.eia_schema   import *
+from sql.price_schema  import *
+from sql.quandl_schema import *
 from sql import initialize_sql
 
 

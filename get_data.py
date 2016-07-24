@@ -3,67 +3,25 @@ import argparse
 from datetime import datetime
 
 import requests
-import eia
+import quandl
 
 from sql.db_connect import Connect
+
 
 with open('config.json') as cfg:
     config = json.load(cfg)
 
 
 db = Connect(config['SQLALCHEMY_DATABASE_URI'])
+quandl.ApiConfig.api_key = config['quandl_api_key']
 
 y_api = 'https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quotes where symbol in ("%s");&format=json&env=store://datatables.org/alltableswithkeys&callback='
 
-eia_api = eia.API(config['eia_api_key'])
+#eia_api = eia.API(config['eia_api_key'])
 
 
-def store_eia_data(option):
-    # PET_IMPORTS.WORLD-US-ALL.M 
-    # Imports of all grades of crude oil from World to Total U.S. (US), Monthly
-
-    if option == 'imports':
-        search = eia_api.data_by_series('PET_IMPORTS.WORLD-US-ALL.M')
-
-    elif option == 'exports':
-        search = eia_api.data_by_series('PET.MTTEXUS1.M')
-
-    #for key, value in search.items():
-    #    print(key, value)
-
-    # First key is a long as name
-    # This was fucking confusing as fuck, fuck you EIA
-    # Thats cool EIA, I'll strip the whitespace
-    
-    # The good stuff (dict)
-    data = search[list(search.keys())[0]]
-
-    for key in data.keys():
-        date  = datetime.strptime(key.strip(), '%Y %m')
-        value = data[key]
-        
-        if option == 'imports':
-            exists = db.session.query(db.base.classes.eia_imports).filter(db.base.classes.eia_imports.date == date).first()
-
-        elif option == 'exports':
-            exists = db.session.query(db.base.classes.eia_exports).filter(db.base.classes.eia_exports.date == date).first()
-
-        if exists:
-            continue 
-
-        print(date, value)
-
-        if option == 'imports':
-            new_data = db.base.classes.eia_imports(p_time=datetime.now(), date=date, value=value)
-
-        elif option == 'exports':
-            new_data = db.base.classes.eia_exports(p_time=datetime.now(), date=date, value=value)
-
-
-        db.session.add(new_data)
-        db.session.commit()
-
-
+# proved oil reserves global
+# https://www.quandl.com/data/BP?keyword=proved
 
 def store_data(ticker):
 
@@ -85,24 +43,66 @@ def store_data(ticker):
                                       r_time=r_time,
                                       ticker=ticker,
                                       name=jd['Name'],
-                                      change=float(jd['LastTradePriceOnly']) - float(jd['PreviousClose']),
                                       open_price=jd['Open'],
                                       previous_close=jd['PreviousClose'],
                                       price=jd['LastTradePriceOnly'])
     db.session.add(new_data)
     db.session.commit()
+
+
+
+
+# https://www.quandl.com/data/JODI?keyword=crude%20oil%20production%20russia
+def store_quandl(code):
+    data = quandl.get(code)
+
+    new_entry_c = 0
+
+    print('Storing quandl data for: %s...' % (code), " ", end="")
+    # index is the date
+    for index, row in data.iterrows():
+        date  = index
+        value = row['Value']
+
+        exists = db.session.query(db.base.classes.quandl).filter(db.base.classes.quandl.date == date).filter(db.base.classes.quandl.code == code).first()
         
+        if exists:
+            continue
+
+        new_data = db.base.classes.quandl(p_time=datetime.now(),
+                                          date=date,
+                                          code=code,
+                                          value=value)
+   
+        
+
+        db.session.add(new_data)
+        db.session.commit()
+        new_entry_c += 1
+
+    print('added: %s/%s entries' % (new_entry_c, len(data)))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='store economic data')
-    parser.add_argument('--store-ticker', action='store')
-    parser.add_argument('--store-eia-data', action='store')
+    parser.add_argument('--store-comm', action='store_true', help='store commodities defined in the config')
+    parser.add_argument('--store-global', action='store_true')
 
     args = parser.parse_args()
    
-    if args.store_ticker:
-        store_data(args.store_ticker)
-    
-    elif args.store_eia_data:
-        store_eia_data(args.store_eia_data)
+    if args.store_comm:
+        for c in config['commodities']:
+            store_data(config['commodities'][c])
 
+    elif args.store_global:
+        print('Storing exports...')
+        for key in config['global_exports']:
+            store_quandl(config['global_exports'][key])
+
+        print('Storing imports...')
+        for key in config['global_imports']:
+            store_quandl(config['global_imports'][key])
+
+        print('Storing production...')
+        for key in config['global_production']:
+            store_quandl(config['global_production'][key])

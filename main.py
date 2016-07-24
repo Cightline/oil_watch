@@ -24,12 +24,22 @@ def map():
 
 @app.route('/commodities')
 def commodities():
-    return render_template('commodities.html', db=db)
+    commodities = {}
+
+    for key in config['commodities']:
+        commodities[key] = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == config['commodities'][key]).first()
+
+
+    return render_template('commodities.html', db=db, commodities=commodities)
 
 @app.route('/stats')
 def production():
+    limit = 50
+    productions = {}
+    chart_list  = []
 
-    return render_template('stats.html',  db=db)
+
+    return render_template('stats.html')
 
 if __name__ == '__main__':
     app.run(host=config['host'], port=config['port'])
