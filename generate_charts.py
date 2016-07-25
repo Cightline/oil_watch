@@ -74,7 +74,7 @@ def generate_chart(operation, title, x_axis_label, y_axis_label):
     layout = dict(title = title, xaxis = dict(title = x_axis_label), yaxis = dict(title = y_axis_label))
 
     fig = dict(data=traces, layout=layout)
-    py.plot(fig, filename=operation)
+    py.plot(fig, filename=operation, auto_open=False)
 
 
 
