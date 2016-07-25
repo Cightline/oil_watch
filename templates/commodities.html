@@ -47,7 +47,7 @@ function change(price, open_price)
                 <td><a href="http://finance.yahoo.com/quote/{{ commodities[c].ticker }}/news">{{ c | upper }}</td>
                 <td class="text-right"> {{ commodities[c].price }} </td>
                 <td class="text-right"><script>document.write(change({{ commodities[c].price }}, {{ '%0.2f' %  (commodities[c].open_price) }}));</script> </td>
-                <td class="text-right"> {{ commodities[c].p_time.strftime('%B %d %Y') }} </td>
+                <td class="text-right"> {{ commodities[c].publish_time.strftime('%B %d %Y') }} </td>
             </tr>
             {% endif %}
             {% endfor %}

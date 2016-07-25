@@ -27,7 +27,7 @@ def commodities():
     commodities = {}
 
     for key in config['commodities']:
-        commodities[key] = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == config['commodities'][key]).first()
+        commodities[key] = db.session.query(db.base.classes.prices).filter(db.base.classes.prices.ticker == config['commodities'][key]).order_by(db.base.classes.prices.publish_time.desc()).first()
 
 
     return render_template('commodities.html', db=db, commodities=commodities)

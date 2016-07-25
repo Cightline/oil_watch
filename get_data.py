@@ -37,10 +37,10 @@ def store_data(ticker):
     # We want this to fail is something isn't here
     # LastTradeDate 7/15/2016
     
-    r_time = datetime.combine(datetime.strptime(jd['LastTradeDate'], '%m/%d/%Y'), datetime.strptime(jd['LastTradeTime'], '%I:%M%p').time())
+    publish_time = datetime.combine(datetime.strptime(jd['LastTradeDate'], '%m/%d/%Y'), datetime.strptime(jd['LastTradeTime'], '%I:%M%p').time())
 
-    new_data = db.base.classes.prices(p_time=datetime.now(), 
-                                      r_time=r_time,
+    new_data = db.base.classes.prices(request_time=datetime.now(), 
+                                      publish_time=publish_time,
                                       ticker=ticker,
                                       name=jd['Name'],
                                       open_price=jd['Open'],

@@ -6,9 +6,9 @@ class Price(Base):
     id          = Column(Integer, primary_key=True)
 
     # time we requested the price
-    p_time      = Column(DateTime)
+    request_time      = Column(DateTime)
     # time the price was reported
-    r_time      = Column(DateTime)
+    publish_time      = Column(DateTime)
     
     price       = Column(Float)
     ticker      = Column(String(100))
