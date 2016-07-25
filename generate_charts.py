@@ -29,42 +29,57 @@ def get_country(code, operation):
 
 
 
-def generate_chart(operation):
-    now  = date.today()
-    past = now + relativedelta(months=-48)
+def generate_chart(operation, title, x_axis_label, y_axis_label):
+    now       = date.today()
+    past      = now + relativedelta(months=-48)
 
     data_x = []
     data_y = {}
     traces = []
 
-   
+  
+    # Use months as a common iterator across all the data
     for dt in rrule.rrule(rrule.MONTHLY, dtstart=past, until=now):
         print(dt.month, dt.year)
 
+        # Store which month we are working on 
         data_x.append(dt) 
 
-        for country in config[operation]:
-            q = db.session.query(quandl).filter(extract('month', quandl.date) == dt.month).filter(extract('year', quandl.date) == dt.year).filter(quandl.code == config[operation][country]).all()
 
+        # Then store all the data from that month
+        for country in config[operation]:
+            # Get all the items for the matching month and year
+            q = db.session.query(quandl).filter(extract('month', quandl.date) == dt.month).filter(extract('year', quandl.date) == dt.year).filter(quandl.code == config[operation][country]).all()
+            
+            # Initialize the dictionary if it doesn't exist yet and add the data
             for item in q:
                 if item.code not in data_y:
                     data_y[item.code] = []
 
-                data_y[item.code].append(item.value)
+                # Check and see if the data exists, and if it does append it to the list
 
-        
+                if item.value:
+                    data_y[item.code].append(item.value)
+
+                else:
+                    data_y[item.code].append([])
+
+
+    # Each "key" is a code (JODI/OIL_CRIMKB_CHN), we need to lookup the key name (get_country) and add it to traces
     for key in data_y:
-       
-
         traces.append(go.Scatter(x=data_x, y=data_y[key], name=get_country(key, operation)))
 
+    
+    
+    layout = dict(title = title, xaxis = dict(title = x_axis_label), yaxis = dict(title = y_axis_label))
 
-    py.plot(traces, filename=operation)
+    fig = dict(data=traces, layout=layout)
+    py.plot(fig, filename=operation)
 
 
 
 
-generate_chart('global_imports')
-generate_chart('global_exports')
-generate_chart('global_production')
+generate_chart('global_imports',    'Global Crude Oil Imports', '',    'thousands of barrels')
+generate_chart('global_exports',    'Global Crude Oil Exports', '',    'thousands of barrels')
+generate_chart('global_production', 'Global Crude Oil Production', '', 'thousands of barrels')
 
